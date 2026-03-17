@@ -22,6 +22,7 @@ requirements = python3,kivy,pillow
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
+android.sdk = 24
 android.archs = armeabi-v7a,arm64-v8a
 
 # 权限
