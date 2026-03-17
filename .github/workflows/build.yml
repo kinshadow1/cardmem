@@ -3,25 +3,6 @@ name: Build APK
 on:
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          main.py
-          mobile_app.py
-          buildozer.specname: Build APK
-
-on:
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -49,46 +30,3 @@ jobs:
         with:
           name: CardMem-APK
           path: bin/*.apk
-
-          data/
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
-
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk
-
-    - name: Use existing Android SDK
-      run: |
-        echo "Using pre-installed Android SDK"
-        ls -la /usr/local/lib/android/sdk/
-
-    - name: Install Buildozer
-      run: |
-        pip install cython buildozer
-
-    - name: Build APK
-      run: |
-        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-        export ANDROID_HOME=/usr/local/lib/android/sdk
-        export ANDROID_NDK_HOME=/usr/local/lib/android/sdk/ndk/27.3.13750724
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-
-        # 查看可用的 NDK
-        ls -la $ANDROID_HOME/ndk/
-
-        # 使用 NDK 21
-        export ANDROID_NDK=/usr/local/lib/android/sdk/ndk/27.3.13750724
-
-        buildozer android debug 2>&1
-      working-directory: ${{ github.workspace }}
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: CardMem-APK
-        path: bin/*.apk
