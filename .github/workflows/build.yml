@@ -13,6 +13,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          main.py
+          mobile_app.py
+          buildozer.spec
+          data/
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -41,7 +47,7 @@ jobs:
 
     - name: Install Buildozer
       run: |
-        pip install buildozer
+        pip install cython buildozer
 
     - name: Build APK
       run: |
